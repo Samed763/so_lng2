@@ -1,20 +1,36 @@
 #include "so_long.h"
 
-
-void	free_map(char **map)
+static void	print_all(t_game *game)
 {
-    int i;
+	printf("game->map_name: %s\n", game->map_name);
+	printf("game->map_width:%d game->map_height:%d \n\n", game->map_width,
+		game->map_height);
+	printf("game->exit_x:%d game->exit_y:%d \n\n", game->exit_x, game->exit_y);
+	printf("game->player.x:%d game->player.y:%d \n\n", game->player.x,
+		game->player.y);
+	printf("game->collectibles_count:%d game->player_count:%d \n\n",
+		game->collectibles_count, game->player_count);
+	printf("game->exit_count:%d \n\n", game->exit_count);
+	printf("game->controls.fill_collectible_count:%d\n",
+		game->controls.fill_collectible_count);
+	printf("game->controls.fill_exit_count:%d\n",
+		game->controls.fill_exit_count);
+	printf("game->controls.is_rectangular:%d\n", game->controls.is_rectangular);
+	printf("game->controls.is_closed:%d\n", game->controls.is_closed);
+	printf("game->controls.any_other_char:%d\n", game->controls.any_other_char);
+}
 
-    if (map)
-    {
-        i = 0;
-        while (map[i])
-        {
-            free(map[i]);
-            i++;
-        }
-        free(map);
-    }
+int	fill_flood_check(char **map, int y, int x, char **visited)
+{
+	if (y < 0 || x < 0 || !map[y] || !map[y][x] || visited[y][x] == '1'
+		|| map[y][x] == '1')
+		return (0);
+	visited[y][x] = '1';
+	fill_flood_check(map, y - 1, x, visited);
+	fill_flood_check(map, y + 1, x, visited);
+	fill_flood_check(map, y, x - 1, visited);
+	fill_flood_check(map, y, x + 1, visited);
+	return (1);
 }
 
 void	read_map(t_game *game) // returna gerek yok
@@ -23,6 +39,7 @@ void	read_map(t_game *game) // returna gerek yok
 	int fd;
 	int line_len;
 
+	set_height_and_width(game);
 	j = 0;
 	fd = open(game->map_name, O_RDONLY);
 	if (fd == -1)
@@ -46,34 +63,32 @@ void	to_do_list(t_game *game)
 {
 	// 0. Initialize the game
 	initialize_game(game);
-	printf("game->map_name: %s\n", game->map_name);
-	
-	printf("game->map_width:%d game->map_height:%d \n\n", game->map_width,
-		game->map_height);
 	// 1. Read the map
+	ft_putstr("read_map\n");
 	read_map(game);
-    if (!game->map)
-    {
-        printf("Error\n");
-        return ;
-    }
-	// 2. Validate the map
-	// 3. Load the textures
-	// 4. Initialize the game
-	// 5. Start the game loop
+	if (!game->map)
+	{
+		printf("Error\n");
+		return ;
+	}
+	find_thing_call(game);
 	write_map(game->map, game->map_height, game->map_width);
-    free_map(game->map);
+	print_all(game);
+	// 2. Validate the map
+	check_map(game);
+	
 }
 
 int	main(int argc, char *argv[])
 {
 	t_game	game;
 
-	if (argc != 2)
+	game.map_name = argv[1];
+	if (argc != 2 || !check_file(game))
 	{
 		printf("Error\n argc control");
 		return (1);
 	}
-	game.map_name = argv[1];
+	game.mlx = mlx_init();
 	to_do_list(&game);
 }

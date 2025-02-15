@@ -5,7 +5,7 @@ void	ft_putchar(char c)
 	write(1, &c, 1);
 }
 
-void	ft_pustr(char *str)
+void	ft_putstr(char *str)
 {
 	int	i;
 
@@ -45,4 +45,18 @@ int	ft_strlen_to_n(char *str)
 		i++;
 	}
 	return (i);
+}
+
+char	*ft_strcpy(char *str1, char *str2)
+{
+	int	i;
+
+	i = 0;
+	while (str2[i])
+	{
+		str1[i] = str2[i];
+		i++;
+	}
+	str1[i] = '\0';
+	return (str1);
 }
