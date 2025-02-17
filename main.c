@@ -1,24 +1,16 @@
-#include "so_long.h"
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   main.c                                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: sadinc <sdinc763@gmail.com>                +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/02/16 17:47:07 by sadinc            #+#    #+#             */
+/*   Updated: 2025/02/16 17:47:08 by sadinc           ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
-static void	print_all(t_game *game)
-{
-	printf("game->map_name: %s\n", game->map_name);
-	printf("game->map_width:%d game->map_height:%d \n\n", game->map_width,
-		game->map_height);
-	printf("game->exit_x:%d game->exit_y:%d \n\n", game->exit_x, game->exit_y);
-	printf("game->player.x:%d game->player.y:%d \n\n", game->player.x,
-		game->player.y);
-	printf("game->collectibles_count:%d game->player_count:%d \n\n",
-		game->collectibles_count, game->player_count);
-	printf("game->exit_count:%d \n\n", game->exit_count);
-	printf("game->controls.fill_collectible_count:%d\n",
-		game->controls.fill_collectible_count);
-	printf("game->controls.fill_exit_count:%d\n",
-		game->controls.fill_exit_count);
-	printf("game->controls.is_rectangular:%d\n", game->controls.is_rectangular);
-	printf("game->controls.is_closed:%d\n", game->controls.is_closed);
-	printf("game->controls.any_other_char:%d\n", game->controls.any_other_char);
-}
+#include "so_long.h"
 
 int	fill_flood_check(char **map, int y, int x, char **visited)
 {
@@ -33,50 +25,53 @@ int	fill_flood_check(char **map, int y, int x, char **visited)
 	return (1);
 }
 
-void	read_map(t_game *game) // returna gerek yok
+static void	move_character(t_game *game, int way_x, int way_y)
 {
-	int j;
-	int fd;
-	int line_len;
-
-	set_height_and_width(game);
-	j = 0;
-	fd = open(game->map_name, O_RDONLY);
-	if (fd == -1)
-		game->map = NULL;
-	game->map = malloc(sizeof(char *) * (game->map_height + 1));
-	if (!game->map)
-		game->map = NULL;
-	while (j < game->map_height)
+	game->player.new_x = game->player.x + way_x;
+	game->player.new_y = game->player.y + way_y;
+	if (game->map[game->player.new_y][game->player.new_x] != '1')
 	{
-		game->map[j] = get_next_line(fd);
-		line_len = ft_strlen_to_n(game->map[j]);
-		if (line_len != game->map_width)
-			game->map = NULL;
-		j++;
+		game->player.steps++;
+		ft_putstr("Player step count:");
+		ft_putnbr(game->player.steps);
+		ft_putchar('\n');
 	}
-	game->map[game->map_height] = NULL;
-	close(fd);
+	if (game->map[game->player.new_y][game->player.new_x] == 'C'
+		|| game->map[game->player.new_y][game->player.new_x] == '1'
+		|| game->map[game->player.new_y][game->player.new_x] != 'E')
+		to_others(game);
+	else
+		to_floor(game);
+	game->map[game->exit_y][game->exit_x] = 'E';
 }
 
-void	to_do_list(t_game *game)
+static void	to_do_list(t_game *game)
 {
-	// 0. Initialize the game
 	initialize_game(game);
-	// 1. Read the map
-	ft_putstr("read_map\n");
 	read_map(game);
 	if (!game->map)
 	{
 		printf("Error\n");
+		free_all(game);
 		return ;
 	}
 	find_thing_call(game);
 	write_map(game->map, game->map_height, game->map_width);
-	print_all(game);
-	// 2. Validate the map
 	check_map(game);
-	
+}
+static int	handle_key(int key, t_game *game)
+{
+	if (key == 65307)
+		free_all(game);
+	else if (key == 'w' || key == 'W')
+		move_character(game, 0, -1);
+	else if (key == 'a' || key == 'A')
+		move_character(game, -1, 0);
+	else if (key == 's' || key == 'S')
+		move_character(game, 0, 1);
+	else if (key == 'd' || key == 'D')
+		move_character(game, 1, 0);
+	return (0);
 }
 
 int	main(int argc, char *argv[])
@@ -91,4 +86,10 @@ int	main(int argc, char *argv[])
 	}
 	game.mlx = mlx_init();
 	to_do_list(&game);
+	game.win = mlx_new_window(game.mlx, game.map_width * 64, game.map_height
+			* 64, "so_long");
+	render_map(&game);
+	mlx_key_hook(game.win, handle_key, &game);
+	mlx_hook(game.win, 17, 0, free_all, &game);
+	mlx_loop(game.mlx);
 }

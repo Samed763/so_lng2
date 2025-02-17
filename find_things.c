@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   find_things.c                                      :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: sadinc <sdinc763@gmail.com>                +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/02/16 17:47:11 by sadinc            #+#    #+#             */
+/*   Updated: 2025/02/16 17:50:16 by sadinc           ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "so_long.h"
 
 static void	flag_f(t_game *game)
@@ -43,15 +55,16 @@ static void	thing_place(t_game *game, char thing, char flag)
 
 void	find_thing(t_game *game, char thing, char flag)
 {
+	
 	game->th_y = 0;
 	while (game->map[game->th_y])
 	{
 		game->th_x = 0;
 		while (game->map[game->th_y][game->th_x])
 		{
-			if (check_chars("01PEC", game->map[game->th_y][game->th_x]))
+			if (check_chars("01PEC\n", game->map[game->th_y][game->th_x]))
 			{
-				ft_putstr("Errorxxx\n");
+				ft_putstr("Error\n");
 				free_all(game);
 			}
 			thing_place(game, thing, flag);

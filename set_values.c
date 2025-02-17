@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   set_values.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sadinc <sadinc@student.42kocaeli.com.tr    +#+  +:+       +#+        */
+/*   By: sadinc <sdinc763@gmail.com>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/14 17:10:46 by sadinc            #+#    #+#             */
-/*   Updated: 2025/02/15 17:34:22 by sadinc           ###   ########.fr       */
+/*   Updated: 2025/02/16 17:47:00 by sadinc           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,11 +36,9 @@ static void	initialize_player(t_game *game)
 }
 void	read_xpm(t_game *game)
 {
-	ft_putstr("read_xpm\n");
 	game->textures.wall = mlx_xpm_file_to_image(game->mlx,
 			"textures/bricks.xpm", &game->textures.width,
 			&game->textures.height);
-	ft_putstr("read_xpm\n");
 	game->textures.floor = mlx_xpm_file_to_image(game->mlx,
 			"textures/leavesop.xpm", &game->textures.width,
 			&game->textures.height);
@@ -56,7 +54,7 @@ void	read_xpm(t_game *game)
 }
 void	initialize_game(t_game *game)
 {
-	ft_putstr("initialize_game\n");
+	game->win = NULL;
 	game->map_width = 0;
 	game->map_height = 0;
 	game->exit_x = 0;

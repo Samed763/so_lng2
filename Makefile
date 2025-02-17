@@ -8,6 +8,7 @@ GNLDIR = ./get_next_line
 
 SRC = $(GNLDIR)/get_next_line.c $(GNLDIR)/get_next_line_utils.c main.c set_values.c \
 	utils_one.c gecici.c utils_two.c utils_three.c find_things.c free_all.c check_map.c\
+	render_utils.c movement_utils.c
 
 OBJ = $(SRC:.c=.o)
 

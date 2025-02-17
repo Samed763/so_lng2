@@ -3,21 +3,19 @@
 /*                                                        :::      ::::::::   */
 /*   check_map.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sadinc <sadinc@student.42kocaeli.com.tr    +#+  +:+       +#+        */
+/*   By: sadinc <sdinc763@gmail.com>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/15 17:32:54 by sadinc            #+#    #+#             */
-/*   Updated: 2025/02/15 18:14:45 by sadinc           ###   ########.fr       */
+/*   Updated: 2025/02/16 17:47:16 by sadinc           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "so_long.h"
 
-
 static void	map_shape(t_game *game)
 {
 	if (game->map_width == game->map_height)
 	{
-		ft_putstr("Error\n");
 		game->controls.is_rectangular = 1;
 	}
 }
@@ -27,21 +25,19 @@ static void	check_top_bottom(t_game *game)
 	int	x;
 
 	x = 0;
-	while (x < game->map_width)
+	while (x < ft_strlen_to_n(game->map[0]))
 	{
 		if (game->map[0][x] != '1')
 		{
-			ft_putstr("Error\n");
 			game->controls.is_closed = 1;
 		}
 		x++;
 	}
 	x = 0;
-	while (x < game->map_width)
+	while (x < ft_strlen_to_n(game->map[game->map_height - 1]))
 	{
 		if (game->map[game->map_height - 1][x] != '1')
 		{
-			ft_putstr("Error\n");
 			game->controls.is_closed = 1;
 		}
 		x++;
@@ -57,7 +53,6 @@ static void	check_left_right(t_game *game)
 	{
 		if (game->map[y][0] != '1')
 		{
-			ft_putstr("Error\n");
 			game->controls.is_closed = 1;
 		}
 		y++;
@@ -67,7 +62,6 @@ static void	check_left_right(t_game *game)
 	{
 		if (game->map[y][game->map_width - 1] != '1')
 		{
-			ft_putstr("Error\n");
 			game->controls.is_closed = 1;
 		}
 		y++;
@@ -83,7 +77,7 @@ void	check_map(t_game *game)
 		|| game->exit_count != 1 || game->controls.is_rectangular == 1
 		|| game->controls.is_closed == 1)
 	{
-		ft_putstr("Errorzzz\n");
+		ft_putstr("Error\n");
 		free_all(game);
 	}
 }

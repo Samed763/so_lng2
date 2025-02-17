@@ -2,9 +2,12 @@
 
 eğer sabit width x height istemiyorsan ayar çekmen lazım yada structan sil
 
-k2m13s01% ./so_long map.bera
-initialize_game
-read_xpm
-read_xpm
-zsh: segmentation fault (core dumped)  ./so_long map.bera
-k2m13s01% 
+
+0111111111111
+1C010000000C1
+1000011011001
+1P0011E010001
+1111111111111
+
+sae@Salih:~/yedek/so_lng2$ ./so_long map.ber
+Segmentation fault (core dumped)

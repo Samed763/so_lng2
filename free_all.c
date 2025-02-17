@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   free_all.c                                         :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: sadinc <sdinc763@gmail.com>                +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/02/16 17:47:09 by sadinc            #+#    #+#             */
+/*   Updated: 2025/02/16 17:47:10 by sadinc           ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "so_long.h"
 
 void	free_textures(t_game *game)
@@ -30,19 +42,19 @@ void	free_map(char **map)
 	}
 }
 
-void	free_all(t_game *game)
+int	free_all(t_game *game)
 {
-    free_textures(game);
-    if(game->visited)
-        free_map(game->visited);
-    if (game->map)
-        free_map(game->map);
-    if (game->win)
+	free_textures(game);
+	if (game->visited)
+		free_map(game->visited);
+	if (game->map)
+		free_map(game->map);
+	if (game->win)
 		mlx_destroy_window(game->mlx, game->win);
 	if (game->mlx)
 	{
 		mlx_destroy_display(game->mlx);
 		free(game->mlx);
 	}
-    exit(0);
+	exit(0);
 }
