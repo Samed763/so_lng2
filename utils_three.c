@@ -6,7 +6,7 @@
 /*   By: sadinc <sdinc763@gmail.com>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/16 17:04:11 by sadinc            #+#    #+#             */
-/*   Updated: 2025/02/17 15:25:28 by sadinc           ###   ########.fr       */
+/*   Updated: 2025/02/17 15:57:15 by sadinc           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -129,4 +129,5 @@ void	render_map(t_game *game)
 		}
 		y++;
 	}
+	write_map(game->map, game->map_height, game->map_width);
 }

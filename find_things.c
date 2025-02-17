@@ -6,7 +6,7 @@
 /*   By: sadinc <sdinc763@gmail.com>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/16 17:47:11 by sadinc            #+#    #+#             */
-/*   Updated: 2025/02/16 17:50:16 by sadinc           ###   ########.fr       */
+/*   Updated: 2025/02/17 15:51:25 by sadinc           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,6 +85,7 @@ void		find_thing_call(t_game *game)
 	ft_putstr("\n");
 	find_thing(game, 'E', 'c');
 	find_thing(game, 'C', 'c');
+	
 	free_map(game->visited);
 	game->visited = NULL;
 }

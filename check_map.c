@@ -6,7 +6,7 @@
 /*   By: sadinc <sdinc763@gmail.com>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/15 17:32:54 by sadinc            #+#    #+#             */
-/*   Updated: 2025/02/16 17:47:16 by sadinc           ###   ########.fr       */
+/*   Updated: 2025/02/17 15:57:47 by sadinc           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,9 +73,10 @@ void	check_map(t_game *game)
 	map_shape(game);
 	check_left_right(game);
 	check_top_bottom(game);
-	if (game->collectibles_count <= 0 || game->player_count != 1
+	if (game->controls.fill_exit_count > 0 || game->player_count != 1
 		|| game->exit_count != 1 || game->controls.is_rectangular == 1
-		|| game->controls.is_closed == 1)
+		|| game->controls.is_closed == 1 || game->collectibles_count <= 0
+		|| game->controls.fill_exit_count == 1)
 	{
 		ft_putstr("Error\n");
 		free_all(game);
