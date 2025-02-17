@@ -6,7 +6,7 @@
 /*   By: sadinc <sdinc763@gmail.com>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/16 17:04:11 by sadinc            #+#    #+#             */
-/*   Updated: 2025/02/16 17:46:55 by sadinc           ###   ########.fr       */
+/*   Updated: 2025/02/17 15:25:28 by sadinc           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,25 +50,39 @@ int	check_file(t_game game)
 	close(fd);
 	return (1);
 }
+
+void check_line_len(t_game *game)
+{
+	int 	last_line_len;
+
+	int i = 0;
+
+	while (i< game->map_height)
+	{
+		last_line_len = ft_strlen_to_n(game->map[i]);
+		if (i > 0)
+		{
+			if (last_line_len != game->map_width)
+				free_all(game);
+		}
+		i++;
+	}
+}
+
 void	read_map_lines(t_game *game, int fd)
 {
     int	j;
-    int	line_len;
+	char	*line;
 
     j = 0;
     while (j < game->map_height)
     {
-        game->map[j] = get_next_line(fd);
-        line_len = ft_strlen_to_n(game->map[j]);
-        if (line_len != game->map_width)
-        {
-            free(game->map[j]);
-            game->map = NULL;
-            return ;
-        }
+    	line = get_next_line(fd);
+		game->map[j] = line;
         j++;
     }
-    game->map[game->map_height] = NULL;
+	game->map[j] = NULL;
+    
 }
 
 void	read_map(t_game *game)
@@ -84,6 +98,7 @@ void	read_map(t_game *game)
         return ;
     }
     read_map_lines(game, fd);
+	check_line_len(game);
     close(fd);
 }
 

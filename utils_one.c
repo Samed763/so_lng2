@@ -6,7 +6,7 @@
 /*   By: sadinc <sdinc763@gmail.com>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/16 17:46:56 by sadinc            #+#    #+#             */
-/*   Updated: 2025/02/16 17:46:57 by sadinc           ###   ########.fr       */
+/*   Updated: 2025/02/17 15:20:03 by sadinc           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ void set_height_and_width(t_game *game)
 		line = get_next_line(fd);
 		if (!line)
 			break ;
-		game->map_width = ft_strlen(line);
+		game->map_width = ft_strlen_to_n(line);
 		free(line);
 		i++;
 	}
