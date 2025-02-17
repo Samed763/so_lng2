@@ -6,7 +6,7 @@
 /*   By: sadinc <sdinc763@gmail.com>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/16 17:04:11 by sadinc            #+#    #+#             */
-/*   Updated: 2025/02/17 15:57:15 by sadinc           ###   ########.fr       */
+/*   Updated: 2025/02/17 18:27:36 by sadinc           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,58 +51,81 @@ int	check_file(t_game game)
 	return (1);
 }
 
-void check_line_len(t_game *game)
+void	check_line_len(t_game *game)
 {
-	int 	last_line_len;
+	int	last_line_len;
+	int	i;
 
-	int i = 0;
-
-	while (i< game->map_height)
+	i = 0;
+	while (i < game->map_height)
 	{
 		last_line_len = ft_strlen_to_n(game->map[i]);
 		if (i > 0)
 		{
 			if (last_line_len != game->map_width)
+			{
+				ft_putstr("Error\n");
 				free_all(game);
+			}
 		}
 		i++;
 	}
 }
 
+void	is_all_one(t_game *game)
+{
+	int	i;
+
+	i = 0;
+	while (game->map[game->map_height -1][i])
+	{
+		if (game->map[game->map_height -1][i] != '1')
+		{
+			game->controls.is_closed = 1;
+		}
+		i++;
+	}
+	return ;
+}
+
 void	read_map_lines(t_game *game, int fd)
 {
-    int	j;
+	int		j;
 	char	*line;
 
-    j = 0;
-    while (j < game->map_height)
-    {
-    	line = get_next_line(fd);
+	j = 0;
+	while (j < game->map_height)
+	{
+		line = get_next_line(fd);
+		if (line[0] == '\0')
+		{
+			ft_putstr("----Error\n");
+			ft_putstr(line);
+			break;
+		}
 		game->map[j] = line;
-        j++;
-    }
+		j++;
+	}
 	game->map[j] = NULL;
-    
 }
 
 void	read_map(t_game *game)
 {
-    int	fd;
+	int	fd;
 
-    set_height_and_width(game);
-    fd = open(game->map_name, O_RDONLY);
-    game->map = malloc(sizeof(char *) * (game->map_height + 1));
-    if (!game->map)
-    {
-        game->map = NULL;
-        return ;
-    }
-    read_map_lines(game, fd);
+	set_height_and_width(game);
+	fd = open(game->map_name, O_RDONLY);
+	game->map = malloc(sizeof(char *) * (game->map_height + 1));
+	if (!game->map)
+	{
+		game->map = NULL;
+		return ;
+	}
+	read_map_lines(game, fd);
 	check_line_len(game);
-    close(fd);
+	is_all_one(game);
+	close(fd);
 }
-
-
 
 void	render_map(t_game *game)
 {
